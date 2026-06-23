@@ -1,2 +1,204 @@
 @import "tailwindcss";
 @custom-variant dark (&:where([data-theme=dark], [data-theme=dark] *));
+
+@theme {
+	/* =========================
+     Colors
+     ========================= */
+
+	--color-dark-50: #f7f7f8;
+	--color-dark-100: #ececf1;
+	--color-dark-200: #d9d9e3;
+	--color-dark-300: #c5c5d2;
+	--color-dark-400: #acacbe;
+	--color-dark-500: #8e8ea0;
+	--color-dark-600: #565869;
+	--color-dark-700: #40414f;
+	--color-dark-800: #343541;
+	--color-dark-900: #202123;
+	--color-dark-950: #0d0d0f;
+
+	--color-accent-50: #f0f9ff;
+	--color-accent-100: #e0f2fe;
+	--color-accent-200: #bae6fd;
+	--color-accent-300: #7dd3fc;
+	--color-accent-400: #38bdf8;
+	--color-accent-500: #0ea5e9;
+	--color-accent-600: #0284c7;
+	--color-accent-700: #0369a1;
+	--color-accent-800: #075985;
+	--color-accent-900: #0c4a6e;
+	--color-accent-950: #082f49;
+
+	--color-emerald-50: #ecfdf5;
+	--color-emerald-100: #d1fae5;
+	--color-emerald-200: #a7f3d0;
+	--color-emerald-300: #6ee7b7;
+	--color-emerald-400: #34d399;
+	--color-emerald-500: #10b981;
+	--color-emerald-600: #059669;
+	--color-emerald-700: #047857;
+	--color-emerald-800: #065f46;
+	--color-emerald-900: #064e3b;
+
+	--color-glass-light: rgba(255, 255, 255, 0.05);
+	--color-glass-medium: rgba(255, 255, 255, 0.1);
+	--color-glass-heavy: rgba(255, 255, 255, 0.15);
+
+	/* =========================
+     Fonts
+     ========================= */
+
+	--font-sans: Inter, system-ui, -apple-system, sans-serif;
+	--font-mono: "JetBrains Mono", "Fira Code", monospace;
+
+	/* =========================
+     Shadows
+     ========================= */
+
+	--shadow-glass: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+	--shadow-glass-lg: 0 12px 48px 0 rgba(0, 0, 0, 0.45);
+
+	/* =========================
+     Blur
+     ========================= */
+
+	--blur-xs: 2px;
+}
+
+/* =========================
+   Keyframes
+   ========================= */
+
+@keyframes float {
+	0%,
+	100% {
+		transform: translateY(0);
+	}
+
+	50% {
+		transform: translateY(-10px);
+	}
+}
+
+@keyframes glow {
+	0% {
+		box-shadow: 0 0 20px rgba(14, 165, 233, 0.3);
+	}
+
+	100% {
+		box-shadow: 0 0 30px rgba(14, 165, 233, 0.6);
+	}
+}
+
+@keyframes gradient {
+	0%,
+	100% {
+		background-position: 0% 50%;
+	}
+
+	50% {
+		background-position: 100% 50%;
+	}
+}
+
+@keyframes slideUp {
+	0% {
+		transform: translateY(10px);
+		opacity: 0;
+	}
+
+	100% {
+		transform: translateY(0);
+		opacity: 1;
+	}
+}
+
+@keyframes slideDown {
+	0% {
+		transform: translateY(-10px);
+		opacity: 0;
+	}
+
+	100% {
+		transform: translateY(0);
+		opacity: 1;
+	}
+}
+
+@keyframes fadeIn {
+	0% {
+		opacity: 0;
+	}
+
+	100% {
+		opacity: 1;
+	}
+}
+
+@keyframes scaleIn {
+	0% {
+		transform: scale(0.95);
+		opacity: 0;
+	}
+
+	100% {
+		transform: scale(1);
+		opacity: 1;
+	}
+}
+
+/* =========================
+   Utility Classes
+   ========================= */
+
+@utility animate-spin-slow {
+	animation: spin 20s linear infinite;
+}
+
+@utility animate-pulse-slow {
+	animation: pulse 3s ease-in-out infinite;
+}
+
+@utility animate-float {
+	animation: float 6s ease-in-out infinite;
+}
+
+@utility animate-glow {
+	animation: glow 2s ease-in-out infinite alternate;
+}
+
+@utility animate-gradient {
+	animation: gradient 8s ease infinite;
+}
+
+@utility animate-slide-up {
+	animation: slideUp 0.3s ease-out;
+}
+
+@utility animate-slide-down {
+	animation: slideDown 0.3s ease-out;
+}
+
+@utility animate-fade-in {
+	animation: fadeIn 0.3s ease-out;
+}
+
+@utility animate-scale-in {
+	animation: scaleIn 0.2s ease-out;
+}
+
+@utility glass {
+	@apply bg-glass-medium backdrop-blur-xl border border-white/10;
+}
+
+@utility primary-button {
+	@apply inline-flex items-center justify-center gap-2.5
+           bg-gradient-to-r from-accent-600 to-accent-500
+           hover:from-accent-500 hover:to-accent-400
+           px-4 py-2.25 rounded-xl
+           font-medium text-sm text-white
+           transition-all duration-200
+           shadow-lg shadow-accent-500/25
+           hover:shadow-xl hover:shadow-accent-500/30;
+}
