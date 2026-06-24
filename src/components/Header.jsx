@@ -1,14 +1,7 @@
 import { Link, NavLink } from "react-router-dom";
 import { useTheme } from "../context/ThemeContext"
 import { UserRound, MoonStar, Sun } from "lucide-react"
-
-const navItems = [
-	{ path: '/', label: "Главная" },
-	{ path: '/about', label: "Обо мне" },
-	{ path: '/projects', label: "Проекты" },
-	{ path: '/experience', label: "Опыт" },
-	{ path: '/contact', label: "Контакты" }
-]
+import { NAV_ITEMS } from "../constants/navigation"
 
 export function Header() {
 	const { theme, toggleTheme } = useTheme();
@@ -22,7 +15,7 @@ export function Header() {
 						CrawFish666
 					</Link>
 					<nav>
-						{navItems.map((item) => (
+						{NAV_ITEMS.map((item) => (
 							<NavLink className={({ isActive }) =>
 								`px-4 py-2 rounded-xl text-sm font-medium transition-colors ${isActive
 									? 'text-white bg-white/10'

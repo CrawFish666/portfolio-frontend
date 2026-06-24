@@ -1,22 +1,12 @@
 import { Link, NavLink } from "react-router-dom"
 
 import { SOCIAL_LIST } from "../constants/socialList"
+import { NAV_ITEMS } from "../constants/navigation"
 import { SocialLink } from "./SocialLink"
-const navItems = [
-	{ path: '/', label: "Главная" },
-	{ path: '/about', label: "Обо мне" },
-	{ path: '/projects', label: "Проекты" },
-	{ path: '/experience', label: "Опыт" },
-	{ path: '/contact', label: "Контакты" }
-]
-
-
-
 
 
 export function Footer() {
 
-	// Вынести navItems из Header и Footer и делать либо props drilling либо context прокидывать
 	return (
 		<footer className="border-t border-white/10 bg-dark-900/50 backdrop-blur-xl mt-auto">
 
@@ -32,7 +22,7 @@ export function Footer() {
 					<div className="navigation flex-1 flex flex-col items-center">
 						<h3 className="text-white font-medium mb-4">Навигация</h3>
 						<ul className="space-y-2">
-							{navItems.map((item) => (
+							{NAV_ITEMS.map((item) => (
 								<li key={item.path}>
 									<Link to={item.path} className="text-dark-500 hover:text-white text-sm transition-colors">{item.label}</Link>
 								</li>
