@@ -195,7 +195,7 @@
 @utility primary-button {
 	@apply inline-flex items-center justify-center gap-2.5
            bg-gradient-to-r from-accent-600 to-accent-500
-           hover:from-accent-500 hover:to-accent-400
+           hover:from-accent-800 hover:to-accent-600
            px-4 py-2.25 rounded-xl
            font-medium text-sm text-white
            transition-all duration-200
@@ -348,6 +348,14 @@
 		@apply bg-red-500/20 text-red-300 border border-red-500/30;
 	}
 
+	.tag-gray {
+		@apply bg-slate-500/20 text-slate-300 border border-slate-500/30;
+	}
+
+	.tag-cyan {
+		@apply bg-cyan-500/20 text-cyan-300 border border-cyan-500/30;
+	}
+
 	.priority-high {
 		@apply bg-red-500/20 text-red-400 border-l-2 border-red-500;
 	}
@@ -418,30 +426,30 @@
 }
 
 @layer utilities {
-  .text-gradient {
-    @apply bg-gradient-to-r from-white to-dark-300
+	.text-gradient {
+		@apply bg-gradient-to-r from-white to-dark-300
            bg-clip-text text-transparent;
-  }
+	}
 
-  .bg-gradient-radial {
-    background: radial-gradient(ellipse at center, var(--tw-gradient-stops));
-  }
+	.bg-gradient-radial {
+		background: radial-gradient(ellipse at center, var(--tw-gradient-stops));
+	}
 
-  .animate-in {
-    animation: fadeIn 0.3s ease-out;
-  }
+	.animate-in {
+		animation: fadeIn 0.3s ease-out;
+	}
 
-  .hover-lift {
-    @apply transition-transform duration-200 hover:-translate-y-0.5;
-  }
+	.hover-lift {
+		@apply transition-transform duration-200 hover:-translate-y-0.5;
+	}
 
-  .glow {
-    box-shadow: 0 0 40px rgba(14, 165, 233, 0.3);
-  }
+	.glow {
+		box-shadow: 0 0 40px rgba(14, 165, 233, 0.3);
+	}
 
-  .glow-sm {
-    box-shadow: 0 0 20px rgba(14, 165, 233, 0.2);
-  }
+	.glow-sm {
+		box-shadow: 0 0 20px rgba(14, 165, 233, 0.2);
+	}
 }
 
 @utility glass-button {
