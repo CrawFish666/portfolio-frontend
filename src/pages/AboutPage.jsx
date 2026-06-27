@@ -184,7 +184,7 @@ export function AboutPage() {
 						<h3 className="text-2xl font-semibold text-white mb-6 text-center">Что я ищу?</h3>
 						<div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4 text-center">
 							{goals.map(item => (
-								<div className="flex flex-col items-center glass-card p-6 transition-all duration-300 hover:-translate-y-1 hover:border-accent-500/20">
+								<div key={item.title} className="flex flex-col items-center glass-card p-6 transition-all duration-300 hover:-translate-y-1 hover:border-accent-500/20">
 									<item.icon className={`w-8 h-8 mb-2 ${item.color}`} />
 									<p className="text-xl font-bold text-white mb-2">{item.title}</p>
 									<p className="text-dark-400 text-sm">{item.description}</p>
