@@ -15,7 +15,7 @@ export function Footer() {
 				<div className="upper flex justify-between gap-8">
 					{/* Brand */}
 					<div className="brand flex-1">
-						<span className="text-lg font-semibold text-white hidden sm:block">CrawFish666</span>
+						<span className="text-lg font-semibold text-white sm:block">CrawFish666</span>
 						<p className="text-dark-500 text-sm">Frontend React Developer portoflio showcasing projects and experience.</p>
 					</div>
 					{/* Nav */}
