@@ -36,7 +36,6 @@ export function Header() {
 						Войти
 					</Link>
 				</div>
-
 			</div>
 		</header>
 	)
