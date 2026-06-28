@@ -8,13 +8,14 @@ export function SocialLink({ item, customSize }) {
 
 	return (
 		item.isExternal ?
-			<a key={item.path}
+			<a
 				href={item.path}
 				rel="noopener noreferrer"
+				target="_blank"
 				className={baseClassName}>
 				<Icon style={{ width: size, height: size }} />
 			</a> :
-			<Link key={item.path}
+			<Link
 				to={item.path}
 				className={baseClassName}>
 				<Icon style={{ width: size, height: size }} />
