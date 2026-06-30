@@ -15,6 +15,7 @@ export function ContactPage() {
 			.min(2, "Минимум 2 символа")
 			.max(12, "Максимум 12  символов"),
 		email: z.string()
+			.trim()
 			.min(1, "Email обязателен")
 			.email("Неверный формат email"),
 		subject: z.string().trim().min(3, "Минимум 4 символа").max(20, "Максимум 20 символов"),
@@ -106,7 +107,7 @@ export function ContactPage() {
 				<div className="form feedback">
 					<div className="glass-card p-8">
 						<h2 className="text-xl font-semibold text-white mb-6">Отправить сообщение</h2>
-						<form onSubmit={handleSubmit(onSubmitSuccess, onSubmitError)}
+						<form noValidate onSubmit={handleSubmit(onSubmitSuccess, onSubmitError)}
 							className="space-y-5">
 							{/**	const {
 		register,

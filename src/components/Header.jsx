@@ -31,7 +31,7 @@ export function Header() {
 					>
 						{theme === "dark" ? <MoonStar className={"w-8 h-8"} /> : <Sun className={"w-8 h-8 text-yellow-500"} />}
 					</button>
-					<Link to={'/login'} className={"primary-button text-base"}>
+					<Link to={'/sing-in'} className={"primary-button text-base"}>
 						<UserRound className="w-6 h-6" />
 						Войти
 					</Link>
