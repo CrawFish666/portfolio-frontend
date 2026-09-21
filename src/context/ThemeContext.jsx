@@ -21,20 +21,15 @@ function ThemeProvider({ children }) {
 		<ThemeContext.Provider value={{ theme, toggleTheme }}>
 			{children}
 		</ThemeContext.Provider>
-
 	)
-
 }
 
 function useTheme() {
-
 	const context = useContext(ThemeContext);
 	if (!context) {
 		throw new Error("Хук useTheme невозможно использовать вне ThemeProvider")
 	}
-
 	return context;
-
 }
 
 export { useTheme, ThemeProvider }
