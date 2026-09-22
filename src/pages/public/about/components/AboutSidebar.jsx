@@ -1,8 +1,23 @@
 import { getAvailabilityLabel } from "@/utils/availability";
 
-const getYearsText = (years) => {
-	if (years % 10 === 1 && years % 100 !== 11) return "год";
-	if (years % 10 >= 2 && years % 10 <= 4 && (years % 100 < 10 || years % 100 >= 20)) return "года";
+const getYearsText = (value) => {
+	const years = Number(value);
+	if (!Number.isFinite(years)) {
+		return "лет";
+	}
+	if (!Number.isInteger(years)) {
+		return "года";
+	}
+	if (years % 10 === 1 && years % 100 !== 11) {
+		return "год";
+	}
+	if (
+		years % 10 >= 2 &&
+		years % 10 <= 4 &&
+		(years % 100 < 10 || years % 100 >= 20)
+	) {
+		return "года";
+	}
 	return "лет";
 };
 
@@ -18,7 +33,7 @@ export function AboutSidebar({ settings, isLoading }) {
 			<p className="text-secondary text-center text-sm mb-6">Frontend Developer</p>
 			<div className="space-y-3 text-base">
 				<div className="flex justify-between gap-5 border-b border-dark-700 py-2">
-					<span className="text-muted">Опыт в разработке</span>
+					<span className="text-muted">Опыт разработки</span>
 					<span className="text-primary">
 						{isLoading
 							? "—"
