@@ -28,7 +28,7 @@ export function AboutPage() {
 		technologies.forEach((technology) => {
 			const category = technology.category;
 
-			if (!category?._id) {
+			if (!category?._id || !category.isActive) {
 				return;
 			}
 
