@@ -1,35 +1,126 @@
-# What need to do ?
-1. - [ ] Написать backend для авторизации по JWT
-2. - [ ] Добавить защищенные роуты и публичные роуты
-3. - [ ] Написать backend на Node.js используя базу MongoDB(?) и заполнить таблицы не моковыми данными
-4. - [ ] Рефакторинг стилей для уже существующей dark темы
-5. - [ ] Продумать стили для light темы
-6. - [ ] Добавить статику страницы проектов(при нажатии подробнее) используя мок данные
-7. - [ ] Добавить на фронте полную авторизацию и сопутствующее разделение(AuthContext?)
-8. - [ ] Оживить всю статику используя данные с backend
-9. - [ ] Добавить статическую страницу админ-панели
-10. - [ ] Добавить права demo-admin для демонстрации админ-панели
-11. - [ ] Свзять админ панель с backend(CRUD)
-12. - [ ] Добавить статик страницу регистрации
-13. - [ ] Добавить статик страницу восстановления пароля
-14. - [ ] Привязать почтовый сервис для рассылки кода подтверждения почты + для восстановления пароля
-15. - [ ] Рефакторинг всех стилей/классов. Удалить ненужную разметку. Вынести повторяющийся код(при наличии) в отдельные компоненты.
-16. - [ ] Добавить анимацию.
-17. - [ ] На HomePage добавить паралакс эффект используя видео, которое воспроизводится скроллом(Референс: Темная комната. На заднем плане находится стол, включенные мониторы, системный блок. На ближнем плане человек на стуле у которого сверху такая старая лампа накаливания накрытая черным/темным палафоном, которая слегка светит и мерцает. Человек сидящий на стуле находится полубоком к камере. Сзади стула окно с видом на улицу. На улице темно и лишь изредка сверкают огни/звезды. Скролл привязан к воспроизведению видео. Соответственно при скролле вниз камера наезжает на монитор и след. секция будто бы мы находимся внутри монитора)
-Optional: 18. - [ ] Code review with senior fullstack developer
+# CrawFish666 — Portfolio
 
-# What already done
-1. - [x] UPD: Добавлена возможность смены цвета через ThemeContext with Tailwind CSS v4
-2. - [x] Header
-3. - [x] UPD: Добавлены все роуты, кроме защищенных
-4. - [x] Сделан Footer
-5. - [x] Сделаны layout для страниц портфолио и для AUTH
-6. - [x] Сделана статическая страница HomePage
-7. - [x] Сделана статическая страница AboutPage
-8. - [x] Сделана статическая страница ProjectsPage
-9. - [x] Сделана статическая страница ExperiencePage
-10. - [x] Сделана статическая страница AboutPage
-11. - [x] Сделана форма обратной связи на AboutPage с React Hook Form + Zod валидация
-12. - [x] Для визуала все страницы заполненны моковыми данными из const
-13. - [x] Сделана статическая страница SingInPage для авторизации с формой через RHF + Zod.
-14. - [x] Добавлена навигация из SingInPage для возврата на предыдущую страницу
+Frontend React developer portfolio с админ-панелью и интеграцией с backend.
+
+[Live Demo](https://google.com)
+
+[RoadMap](./ROADMAP.md)
+
+## Стек
+
+- **React 19** + **Vite**
+- **Tailwind CSS v4** — dark/light темы через CSS variables
+- **Tanstack Query** — управление серверным состоянием
+- **React Hook Form + Zod** — валидация форм
+- **React Router DOM** — роутинг с защитой
+- **Axios** — HTTP клиент с interceptors и refresh-очередью
+- **Sonner** — тосты
+
+## Структура проекта
+
+```
+src/
+├── api/                    # API клиенты (axios instances)
+│   ├── client.js           # Базовый axios инстанс
+│   ├── auth.api.js         # Авторизация
+│   ├── projects.api.js     # Проекты
+│   ├── settings.api.js     # Настройки
+│   ├── technologies.api.js # Категории и технологии
+│   └── ...
+├── auth/                   # Auth утилиты
+│   ├── token.manager.js    # Хранение access token
+│   └── auth.events.js
+├── components/
+│   ├── layout/             # Header, Footer, MobileMenu
+│   ├── ui/                 # Переиспользуемые UI компоненты
+│   │   ├── Modal/          # Модальное окно
+│   │   ├── Input/          # Инпуты
+│   │   ├── MultiSelect/    # Мульти-селект
+│   │   └── skeleton/       # Скелетоны
+│   └── skeletons/          # Page-level скелетоны
+├── constants/              # Константы (ROUTES, iconMap, projectStatus)
+├── context/                # React контексты
+│   ├── AuthProvider.jsx    # Аутентификация
+│   └── ThemeContext.jsx    # Темы (dark/light)
+├── hooks/
+│   ├── useAuth.jsx         # Хук авторизации
+│   ├── queries/            # React Query hooks
+│   └── mutations/          # React Query mutations
+├── layouts/                # AppLayout, AuthLayout, DashboardLayout
+├── pages/
+│   ├── public/             # Публичные страницы
+│   │   ├── home/
+│   │   ├── about/
+│   │   ├── contact/
+│   │   ├── experience/
+│   │   └── projects/
+│   ├── auth/               # SignIn, SignUp, ForgotPassword, ResetPassword
+│   └── dashboard/          # Админ-панель
+│       ├── projects/
+│       ├── users/
+│       ├── settings/
+│       ├── messages/
+│       ├── technologies/
+│       ├── experience/
+│       └── availability/
+├── providers/              # QueryProvider и другие провайдеры
+├── routes/                 # Роутинг с защитой
+│   ├── pathsConstants.js   # Константы путей
+│   ├── ProtectedRoutes.jsx
+│   ├── GuestOnlyRoutes.jsx
+│   └── AdminOnlyRoutes.jsx
+└── utils/                  # Утилиты и схемы валидации
+```
+
+## Роуты
+
+### Публичные
+| Роут | Страница |
+|------|----------|
+| `/` | HomePage |
+| `/about` | AboutPage |
+| `/projects` | ProjectsPage |
+| `/projects/:slug` | ProjectDetailPage |
+| `/experience` | ExperiencePage |
+| `/contact` | ContactPage |
+
+### Авторизация
+| Роут | Страница |
+|------|----------|
+| `/sign-in` | SignInPage |
+| `/sign-up` | SignUpPage |
+| `/forgot-password` | ForgotPasswordPage |
+| `/reset-password/:token` | ResetPasswordPage |
+
+### Админ-панель (`/dashboard`)
+| Роут | Страница |
+|------|----------|
+| `/dashboard` | DashboardHomePage |
+| `/dashboard/projects` | Projects CRUD |
+| `/dashboard/categories-technologies` | Категории и технологии |
+| `/dashboard/settings` | Настройки |
+| `/dashboard/messages` | Сообщения |
+| `/dashboard/users` | Управление пользователями |
+| `/dashboard/experience` | Управление опытом |
+| `/dashboard/availability-statuses` | Статусы доступности |
+
+## Как запустить
+
+```bash
+# Установка зависимостей
+npm install
+
+# Запуск dev сервера
+npm run dev
+
+# Сборка
+npm run build
+
+```
+
+## Описание сервисов
+
+- `src/auth/tokenManager.js` — хранит access token в памяти
+- `src/api/client.js` — Axios с interceptors + refresh очередь
+- `src/context/AuthProvider.jsx` — состояние пользователя и логика auth
+- `src/providers/QueryProvider.jsx` — React Query client
