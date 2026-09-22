@@ -45,7 +45,9 @@ export function ExperienceTrackerCard({ experience }) {
 					</div>
 				</div>
 				{/* Description */}
-				<p className="text-secondary text-sm mb-4">{experience.description}</p>
+				<p className="text-secondary text-sm mb-4 whitespace-pre-line">
+					{experience.description}
+				</p>
 				{/* Technologies */}
 				{experience.tech?.length > 0 && (
 					<div className="mb-5">
