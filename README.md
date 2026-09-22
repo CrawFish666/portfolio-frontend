@@ -2,7 +2,7 @@
 
 Frontend React developer portfolio с админ-панелью и интеграцией с backend.
 
-[Live Demo](https://google.com)
+[Live Demo](https://emelyan-chekushkin-portfolio-dev.vercel.app/)
 
 [RoadMap](./ROADMAP.md)
 
