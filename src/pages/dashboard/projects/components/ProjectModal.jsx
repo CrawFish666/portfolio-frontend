@@ -11,8 +11,9 @@ const DEFAULT_VALUES = {
 	title: "",
 	slug: "",
 	liveDemo_url: "",
-	image_url: "",
 	source_url: "",
+
+	image: null,
 
 	status: "",
 
@@ -24,6 +25,79 @@ const DEFAULT_VALUES = {
 	favorite: false,
 	is_public: true,
 };
+
+function ImageField({ project, control }) {
+	return (
+		<Controller
+			name="image"
+			control={control}
+			render={({ field, fieldState }) => {
+				const previewUrl = field.value
+					? URL.createObjectURL(field.value)
+					: project?.image_url;
+
+				return (
+					<div className="min-w-0 h-full flex flex-col">
+						<label className="block text-sm mb-2">
+							Изображение
+						</label>
+
+						<div className="flex items-center gap-4 p-3 rounded-xl border border-dark-600 bg-dark-800/50 !h-[104px]">
+							<div className="w-20 h-20 shrink-0 rounded-lg overflow-hidden bg-dark-700 flex items-center justify-center">
+								{previewUrl ? (
+									<img
+										src={previewUrl}
+										alt={
+											field.value?.name ??
+											project?.title ??
+											"Изображение проекта"
+										}
+										className="w-full h-full object-cover"
+									/>
+								) : (
+									<span className="text-dark-400 text-xs text-center px-2">
+										Нет фото
+									</span>
+								)}
+							</div>
+
+							<div className="min-w-0 flex-1">
+								<label className="inline-flex cursor-pointer">
+									<span className="glass-button">
+										Выбрать изображение
+									</span>
+
+									<input
+										type="file"
+										accept="image/jpeg,image/png,image/webp,image/gif"
+										className="hidden"
+										onChange={(event) => {
+											field.onChange(
+												event.target.files?.[0] ?? null
+											);
+										}}
+									/>
+								</label>
+
+								<p className="mt-2 text-xs text-dark-400 truncate">
+									{field.value
+										? field.value.name
+										: "JPG, PNG, WEBP или GIF · до 10 МБ"}
+								</p>
+							</div>
+						</div>
+
+						{fieldState.error && (
+							<p className="mt-1 text-sm text-red-400">
+								{fieldState.error.message}
+							</p>
+						)}
+					</div>
+				);
+			}}
+		/>
+	);
+}
 
 export function ProjectModal({
 	isOpen,
@@ -53,21 +127,32 @@ export function ProjectModal({
 	} = methods;
 
 	useEffect(() => {
-
 		if (!isOpen) return;
+
 		if (project) {
 			reset({
-				...project,
-				status: project.status?._id ?? "",
-				tech: project.tech
-					? project.tech.map(t => t._id)
-					: [],
-			});
+				title: project.title ?? "",
+				slug: project.slug ?? "",
+				liveDemo_url: project.liveDemo_url ?? "",
+				source_url: project.source_url ?? "",
 
+				image: null,
+
+				status: project.status?._id ?? "",
+
+				short_description: project.short_description ?? "",
+				full_description: project.full_description ?? "",
+
+				tech: project.tech
+					? project.tech.map((t) => t._id)
+					: [],
+
+				favorite: project.favorite ?? false,
+				is_public: project.is_public ?? true,
+			});
 		} else {
 			reset(DEFAULT_VALUES);
 		}
-
 	}, [project, isOpen, reset]);
 
 	const submit = async (data) => {
@@ -91,24 +176,26 @@ export function ProjectModal({
 					? "Редактировать проект"
 					: "Новый проект"
 			}
-			size="lg">
-
+			size="lg"
+		>
 			<FormProvider {...methods}>
 				<form
 					onSubmit={handleSubmit(submit)}
-					className="space-y-4">
-					<div className="flex gap-4">
+					className="space-y-5"
+				>
+					<div className="grid grid-cols-2 gap-4">
 						<InputField
 							name="title"
 							label="Название"
 						/>
+
 						<InputField
 							name="slug"
 							label="Slug"
 						/>
 					</div>
 
-					<div className="flex gap-4">
+					<div className="grid grid-cols-2 gap-4">
 						<InputField
 							name="liveDemo_url"
 							label="Live Demo"
@@ -120,19 +207,26 @@ export function ProjectModal({
 						/>
 					</div>
 
-					<div className="flex gap-4">
-						<InputField
-							name="image_url"
-							label="Изображение"
+					<div className="grid grid-cols-2 gap-4">
+						<ImageField
+							project={project}
+							control={control}
 						/>
 
-						<InputField
-							name="short_description"
-							label="Краткое описание"
-						/>
+						<div className="min-w-0">
+							<label className="block text-sm mb-2">
+								Краткое описание
+							</label>
+
+							<textarea
+								{...register("short_description")}
+								className="input-field w-full !h-[104px] resize-none"
+								placeholder="Краткое описание проекта"
+							/>
+						</div>
 					</div>
-					<div>
 
+					<div>
 						<label className="block text-sm mb-2">
 							Полное описание
 						</label>
@@ -142,34 +236,32 @@ export function ProjectModal({
 							className="input-field min-h-32 resize-none"
 						/>
 					</div>
-					<div>
 
+					<div>
 						<label className="block text-sm mb-2">
 							Статус
 						</label>
 
 						<select
 							{...register("status")}
-							className="input-field">
-
+							className="input-field"
+						>
 							<option value="">
 								Выберите статус
 							</option>
 
-							{statuses.map(status => (
+							{statuses.map((status) => (
 								<option
 									key={status._id}
-									value={status._id}>
+									value={status._id}
+								>
 									{status.title}
 								</option>
-							))
-							}
-
+							))}
 						</select>
 					</div>
 
 					<div>
-
 						<label className="block text-sm mb-2">
 							Технологии
 						</label>
@@ -178,21 +270,17 @@ export function ProjectModal({
 							name="tech"
 							control={control}
 							render={({ field }) => (
-
 								<TechnologySelect
 									technologies={technologies}
 									value={field.value ?? []}
 									onChange={field.onChange}
 								/>
-
 							)}
 						/>
 					</div>
 
-					<div className="flex gap-4">
-
+					<div className="flex gap-6">
 						<label className="flex gap-2 items-center">
-
 							<input
 								type="checkbox"
 								{...register("favorite")}
@@ -203,30 +291,32 @@ export function ProjectModal({
 						<label className="flex gap-2 items-center">
 							<input
 								type="checkbox"
-								{...register("is_public")}/>
+								{...register("is_public")}
+							/>
 							Публичный
 						</label>
 					</div>
 
-					<div className="flex justify-end gap-3 pt-4">
+					<div className="flex justify-end gap-3 pt-2">
 						<button
 							type="button"
 							className="glass-button"
-							onClick={onClose}>
+							onClick={onClose}
+						>
 							Отмена
 						</button>
 
 						<button
 							type="submit"
 							disabled={isSubmitting || !isDirty}
-							className="primary-button">
-							{project	? "Сохранить" : "Создать"}
+							className="primary-button"
+						>
+							{project ? "Сохранить" : "Создать"}
 						</button>
 					</div>
 				</form>
-
 			</FormProvider>
-
 		</Modal>
 	)
 }
+

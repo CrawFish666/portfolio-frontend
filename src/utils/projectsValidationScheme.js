@@ -32,7 +32,25 @@ export const projectSchema = z.object({
 	short_description: z.string().trim().max(200, "Краткое описание не может быть длиннее 200 символов").optional(),
 	full_description: z.string().trim().optional(),
 	tech: techSchema,
-	image_url: optionalUrlSchema,
+	image: z
+		.instanceof(File)
+		.optional()
+		.nullable()
+		.refine(
+			(file) =>
+				!file ||
+				[
+					"image/jpeg",
+					"image/png",
+					"image/webp",
+					"image/gif",
+				].includes(file.type),
+			"Допустимы JPG, PNG, WEBP и GIF"
+		)
+		.refine(
+			(file) => !file || file.size <= 10 * 1024 * 1024,
+			"Размер изображения не должен превышать 10 МБ"
+		),
 	source_url: optionalUrlSchema,
 	favorite: z.boolean(),
 })
