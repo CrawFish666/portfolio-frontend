@@ -8,10 +8,13 @@ export function AdminOnlyRoutes() {
 
 	if (loading) return null;
 
-	// if (!user) return <Navigate to={ROUTES.HOME} replace />;
+	if (!user) {
+		return <Navigate to={ROUTES.HOME} replace />;
+	}
 
-	{/* Так лучше сделать для secure */ }
-	if (user.role !== "admin") return <NotFoundPage />;
+	if (user.role !== "admin") {
+		return <NotFoundPage />;
+	}
 
 	return <Outlet />;
 }
