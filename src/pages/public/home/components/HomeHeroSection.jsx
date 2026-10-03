@@ -10,9 +10,7 @@ export function HomeHeroSection({
 	settings, loading
 }) {
 
-	const cvUrl = settings?.cvUrl
-		? `${import.meta.env.VITE_FILE_BASE_URL}${settings.cvUrl}`
-		: null;
+	const cvUrl = settings?.cvUrl ?? null;
 
 	return (
 		<section className="flex items-center min-h-dvh py-10">
