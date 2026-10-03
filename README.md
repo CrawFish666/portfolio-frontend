@@ -10,7 +10,7 @@ Frontend React developer portfolio с админ-панелью и интегр�
 
 - **React 19** + **Vite**
 - **Tailwind CSS v4** — dark/light темы через CSS variables
-- **Tanstack Query** — управление серверным состоянием
+- **TanStack Query** — управление серверным состоянием
 - **React Hook Form + Zod** — валидация форм
 - **React Router DOM** — роутинг с защитой
 - **Axios** — HTTP клиент с interceptors и refresh-очередью
@@ -120,7 +120,7 @@ npm run build
 
 ## Описание сервисов
 
-- `src/auth/tokenManager.js` — хранит access token в памяти
+- `src/auth/token.manager.js` — хранит access token в памяти
 - `src/api/client.js` — Axios с interceptors + refresh очередь
 - `src/context/AuthProvider.jsx` — состояние пользователя и логика auth
 - `src/providers/QueryProvider.jsx` — React Query client
