@@ -1,6 +1,5 @@
 import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
-import { z } from "zod"
 import { Link, useLocation, useNavigate } from "react-router-dom"
 import { ArrowLeft } from "lucide-react";
 import { useAuth } from "../../hooks/useAuth";
@@ -9,13 +8,9 @@ import { ROUTES } from '../../routes/pathsConstants';
 
 
 export function SignInPage() {
-	const { user, accessToken, loading, signIn } = useAuth();
+	const { signIn } = useAuth();
 	const navigate = useNavigate();
 	const location = useLocation();
-
-	const singInSchema = loginSchema.extend({
-		rememberMe: z.boolean(),
-	});
 
 	const {
 		register,
@@ -78,13 +73,13 @@ export function SignInPage() {
 					<label className="block text-sm font-medium text-thirdly mb-2" htmlFor="password">Password</label>
 					<input autoComplete="current-password" {...register('password')} className="input-field text-primary" id="password" type="password" placeholder="Enter your password" />
 				</div>
-				<div className="flex justify-between gap-4 mb-5">
-					<label className="flex items-center gap-2" htmlFor="checkbox">
+				<div className="flex justify-end gap-4 mb-5">
+					{/* <label className="flex items-center gap-2" htmlFor="checkbox">
 						<input {...register('rememberMe')} id="checkbox" type="checkbox"
 							className="w-4 h-4"
 						/>
 						<span className="text-sm text-secondary">Запомнить меня</span>
-					</label>
+					</label> */}
 					<Link className="text-blue-400" to={ROUTES.FORGOT_PASSWORD}>Забыли пароль?</Link>
 				</div>
 				<button className="primary-button mb-5" type="submit">Вход</button>

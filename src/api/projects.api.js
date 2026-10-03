@@ -1,5 +1,28 @@
 import api from "./client";
 
+const createProjectFormData = (data) => {
+	const formData = new FormData();
+
+	Object.entries(data).forEach(([key, value]) => {
+		if (key === "image_url" || key === "image") return;
+
+		if (key === "tech") {
+			formData.append(key, JSON.stringify(value ?? []));
+			return;
+		}
+
+		if (value !== undefined && value !== null) {
+			formData.append(key, value);
+		}
+	});
+
+	if (data.image instanceof File) {
+		formData.append("image", data.image);
+	}
+
+	return formData;
+};
+
 export const projectsApi = {
 	async getAll(params, config = {}) {
 		const response = await api.get("/projects", {
@@ -44,12 +67,14 @@ export const projectsApi = {
 	},
 
 	async create(data, config = {}) {
-		const response = await api.post("/admin/projects", data, config);
+		const formData = createProjectFormData(data);
+		const response = await api.post("/admin/projects", formData, config);
 		return response.data.data;
 	},
 
 	async update(id, data, config = {}) {
-		const response = await api.put(`/admin/projects/${id}`, data, config);
+		const formData = createProjectFormData(data);
+		const response = await api.put(`/admin/projects/${id}`, formData, config);
 		return response.data.data;
 	},
 

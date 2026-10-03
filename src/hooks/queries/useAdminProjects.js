@@ -9,5 +9,6 @@ export function useAdminProjects(search) {
 				{ search },
 				{ signal }
 			),
+		placeholderData: (previousData) => previousData,
 	});
 }

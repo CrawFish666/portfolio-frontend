@@ -32,7 +32,6 @@ export function ProjectsPage() {
 			statuses: [],
 			technologies: [],
 		},
-		isLoading: filtersLoading,
 	} = useProjectFilters();
 
 	const statuses = filters.statuses;

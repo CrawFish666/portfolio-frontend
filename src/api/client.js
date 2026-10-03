@@ -3,6 +3,7 @@ import qs from "qs";
 import { tokenManager } from "../auth/token.manager";
 import { authEvents } from "../auth/auth.events";
 import { normalizeError } from "./apiError";
+import { refreshAccessToken } from "../auth/refresh.manager";
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
@@ -17,7 +18,6 @@ const api = axios.create({
 	},
 });
 
-let refreshPromise = null;
 
 api.interceptors.request.use((config) => {
 	const token = tokenManager.getToken();
@@ -31,10 +31,9 @@ api.interceptors.request.use((config) => {
 
 api.interceptors.response.use(
 	(response) => response,
-
 	async (error) => {
 		const originalRequest = error.config;
-		
+
 		if (
 			error.response?.status !== 401 ||
 			!originalRequest ||
@@ -45,33 +44,8 @@ api.interceptors.response.use(
 
 		originalRequest._retry = true;
 
-		if (!refreshPromise) {
-			refreshPromise = axios
-				.post(
-					`${API_BASE_URL}/auth/refresh`,
-					{},
-					{ withCredentials: true }
-				)
-				.then((response) => {
-					const newToken = response.data.data.accessToken;
-
-					tokenManager.setToken(newToken);
-					authEvents.emit("TOKEN_UPDATED", newToken);
-
-					return newToken;
-				})
-				.catch((refreshError) => {
-					tokenManager.clearToken();
-					authEvents.emit("LOGOUT");
-					throw refreshError;
-				})
-				.finally(() => {
-					refreshPromise = null;
-				});
-		}
-
 		try {
-			const newToken = await refreshPromise;
+			const newToken = await refreshAccessToken();
 
 			originalRequest.headers.Authorization = `Bearer ${newToken}`;
 

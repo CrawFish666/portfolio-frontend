@@ -1,20 +1,45 @@
+import { authChannel } from "./auth.channel";
+import { tokenManager } from "./token.manager";
+
 const listeners = new Set();
 
-export const authEvents = {
+const notifyListeners = (event, data) => {
+	listeners.forEach((callback) => {
+		callback(event, data);
+	});
+};
 
-	// Подписка на событие
+export const authEvents = {
 	subscribe(callback) {
 		listeners.add(callback);
 
 		return () => {
 			listeners.delete(callback);
-		}
+		};
 	},
 
-	// Отправка события всем кто подписан
 	emit(event, data) {
-		listeners.forEach((callback) => {
-			callback(event, data);
-		})
+		if (event === "TOKEN_UPDATED") {
+			tokenManager.setToken(data);
+		}
+
+		if (event === "LOGOUT") {
+			tokenManager.clearToken();
+		}
+
+		notifyListeners(event, data);
+		authChannel.emit(event, data);
+	},
+};
+
+authChannel.subscribe((event, data) => {
+	if (event === "TOKEN_UPDATED") {
+		tokenManager.setToken(data);
 	}
-}
+
+	if (event === "LOGOUT") {
+		tokenManager.clearToken();
+	}
+
+	notifyListeners(event, data);
+});

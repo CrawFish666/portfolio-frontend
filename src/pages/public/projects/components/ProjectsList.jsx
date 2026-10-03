@@ -3,8 +3,28 @@ import ProjectCard from "./ProjectCard"
 
 
 export const ProjectsList = memo(function ProjectsList({
-	projects = []
+	projects = [],
+	loading = false,
+	error = false,
 }) {
+
+	if (loading) {
+		return (
+			<div className="text-center py-12">
+				<p className="text-secondary">Загрузка проектов...</p>
+			</div>
+		);
+	}
+
+	if (error) {
+		return (
+			<div className="text-center py-12">
+				<p className="text-secondary">
+					Не удалось загрузить проекты
+				</p>
+			</div>
+		);
+	}
 
 	if (!projects.length) {
 		return (

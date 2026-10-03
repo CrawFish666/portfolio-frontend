@@ -10,9 +10,7 @@ export function HomeHeroSection({
 	settings, loading
 }) {
 
-	const cvUrl = settings?.cvUrl
-		? `${import.meta.env.VITE_FILE_BASE_URL}${settings.cvUrl}`
-		: null;
+	const cvUrl = settings?.cvUrl ?? null;
 
 	return (
 		<section className="flex items-center min-h-dvh py-10">
@@ -36,7 +34,7 @@ export function HomeHeroSection({
 						<span className="text-primary">Привет, я </span>
 						<span className="gradient-text">React FrontEnd Developer</span>
 					</h1>
-					<p className="text-xl text-secondary mb-4 leading-8">Создаю современной веб-приложения с чистым кодом и отличным UX. Специализируюсь на React, TypeScript, Node.js и PostgreSQL.</p>
+					<p className="text-xl text-secondary mb-4 leading-8">Создаю современной веб-приложения с чистым кодом и отличным UX. Специализируюсь на React, TypeScript.</p>
 					<div className="flex items-center gap-1.5 text-secondary mb-8">
 						<MapPin className="w-5 h-5" />
 						Самара, Россия (удалённо)

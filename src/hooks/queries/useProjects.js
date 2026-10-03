@@ -4,14 +4,15 @@ import { projectsApi } from "../../api/projects.api";
 export function useProjects(params) {
 	return useQuery({
 		queryKey: ["projects", "list", params],
-		queryFn: () => projectsApi.getAll(params),
+		queryFn: ({ signal }) => projectsApi.getAll(params, { signal }),
+		placeholderData: (previousData) => previousData,
 	});
 }
 
 export function useProjectBySlug(slug) {
 	return useQuery({
 		queryKey: ["projects", "detail", slug],
-		queryFn: () => projectsApi.getBySlug(slug),
+		queryFn: ({ signal }) => projectsApi.getBySlug(slug, { signal }),
 		enabled: Boolean(slug),
 	});
 }
@@ -19,7 +20,7 @@ export function useProjectBySlug(slug) {
 export function useProjectFilters() {
 	return useQuery({
 		queryKey: ["projects", "filters"],
-		queryFn: () => projectsApi.getFilters(),
+		queryFn: ({ signal }) => projectsApi.getFilters({ signal }),
 		staleTime: 5 * 60 * 1000,
 	});
 }

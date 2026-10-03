@@ -131,7 +131,7 @@ export function CVSection({
 								? ""
 								: ""
 						)}
-						onClick={() => window.open(`${import.meta.env.VITE_FILE_BASE_URL}${cvUrl}`, "_blank")}
+						onClick={() => window.open(`${cvUrl}`, "_blank")}
 					>
 						<Download size={18} />
 						Скачать

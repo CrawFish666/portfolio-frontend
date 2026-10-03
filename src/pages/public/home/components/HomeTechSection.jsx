@@ -2,15 +2,17 @@ import { BsTypescript } from "react-icons/bs"
 import { DiPostgresql } from "react-icons/di"
 import { FaNodeJs, FaReact } from "react-icons/fa"
 import { TbWorld } from "react-icons/tb"
+import { RiTailwindCssFill } from "react-icons/ri";
+import { SiTanstack } from "react-icons/si";
 
 
 
 const techList = [
 	{ name: "React", icon: FaReact },
 	{ name: "TypeScript", icon: BsTypescript },
-	{ name: "Node.js", icon: FaNodeJs},
-	{ name: "PostgreSQL", icon: DiPostgresql },
-	{ name: "Three.js", icon: TbWorld},
+	{ name: "Tailwind CSS", icon: RiTailwindCssFill },
+	{ name: "Zustand", icon: FaReact },
+	{ name: "TanStack Query", icon: SiTanstack },
 ]
 
 export function HomeTechSection() {

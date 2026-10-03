@@ -4,7 +4,9 @@ import { ROUTES } from "../routes/pathsConstants"
 
 
 export function GuestOnlyRoutes() {
-	const { user } = useAuth();
+	const { user, loading } = useAuth();
+	
+	if (loading) return null;
 
 	return user ? <Navigate to={ROUTES.HOME} replace /> : <Outlet />;
 }
