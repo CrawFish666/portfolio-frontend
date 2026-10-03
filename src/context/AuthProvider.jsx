@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState, useCallback } from "react";
+import { useEffect, useState, useCallback, useMemo } from "react";
 import { tokenManager } from "../auth/token.manager";
 import { authApi } from "../api/auth.api";
 import { jwtDecode } from "jwt-decode";
@@ -43,43 +43,33 @@ export function AuthProvider({ children }) {
 		[decodeUserFromToken]
 	);
 
-	const signIn = useCallback(
-		async (email, password) => {
-			const data = await authApi.signIn(email, password);
-			const token = data.accessToken;
-			// Сохраняем access token
-			tokenManager.setToken(token);
-			// Кладем пользователя в React state
-			setUserFromToken(token);
-			return data;
-		},
-		[setUserFromToken]
-	)
+	const signIn = useCallback(async (email, password) => {
+		const data = await authApi.signIn(email, password);
+
+		authEvents.emit("TOKEN_UPDATED", data.accessToken);
+
+		return data;
+	}, []);
 
 	const signUp = useCallback(async (data) => {
 		const response = await authApi.signUp(data);
 
 		if (response?.accessToken) {
-			tokenManager.setToken(response.accessToken);
-			setUserFromToken(response.accessToken);
+			authEvents.emit("TOKEN_UPDATED", response.accessToken);
 		}
+
 		return response;
-	}, [setUserFromToken]
-	)
+	}, []);
 
-	const signOut = useCallback(
-		async () => {
-			authEvents.emit("LOGOUT");
-			setUser(null);
+	const signOut = useCallback(async () => {
+		authEvents.emit("LOGOUT");
 
-			try {
-				await authApi.signOut();
-			} catch (error) {
-				console.error("Logout error", error);
-			}
-		},
-		[]
-	);
+		try {
+			await authApi.signOut();
+		} catch (error) {
+			console.error("Logout error", error);
+		}
+	}, []);
 
 	// Восстановление сессии при F5/Заходе на сайте
 	useEffect(() => {
@@ -130,16 +120,28 @@ export function AuthProvider({ children }) {
 		[]
 	);
 
-	const value = {
-		user,
-		loading,
-		signIn,
-		signUp,
-		signOut,
-		forgotPassword,
-		verifyResetPwdToken,
-		resetPasswordViaToken
-	}
+	const value = useMemo(
+		() => ({
+			user,
+			loading,
+			signIn,
+			signUp,
+			signOut,
+			forgotPassword,
+			verifyResetPwdToken,
+			resetPasswordViaToken,
+		}),
+		[
+			user,
+			loading,
+			signIn,
+			signUp,
+			signOut,
+			forgotPassword,
+			verifyResetPwdToken,
+			resetPasswordViaToken,
+		]
+	);
 
 	return (
 		<AuthContext.Provider value={value}>

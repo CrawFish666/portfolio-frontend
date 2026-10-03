@@ -1,12 +1,4 @@
-import axios from "axios";
 import api from "./client";
-
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
-
-const refreshClient = axios.create({
-	baseURL: API_BASE_URL,
-	withCredentials: true,
-});
 
 export const authApi = {
 	async signIn(email, password) {
@@ -20,15 +12,6 @@ export const authApi = {
 
 	async signUp(data) {
 		const response = await api.post("/auth/register", data);
-		return response.data.data;
-	},
-
-	async refresh() {
-		const response = await refreshClient.post(
-			"/auth/refresh",
-			{}
-		);
-
 		return response.data.data;
 	},
 
