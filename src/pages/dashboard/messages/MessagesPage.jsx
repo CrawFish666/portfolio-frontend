@@ -145,8 +145,7 @@ export function MessagesPage() {
 		return pageNumbers;
 	};
 
-	const isListLoading =
-		listQuery.isLoading || listQuery.isFetching;
+	const isListLoading = listQuery.isLoading;
 
 	useEffect(() => {
 		setPage(1);

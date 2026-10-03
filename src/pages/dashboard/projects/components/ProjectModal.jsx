@@ -2,7 +2,7 @@ import { FormProvider, useForm } from "react-hook-form";
 import Modal from "../../../../components/ui/Modal";
 import InputField from "../../../../components/ui/Input/InputField";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { Controller } from "react-hook-form";
 import { TechnologySelect } from "../../../../components/ui/MultiSelect/TechnologySelect";
 import { projectSchema } from "../../../../utils/projectsValidationScheme";
@@ -31,71 +31,92 @@ function ImageField({ project, control }) {
 		<Controller
 			name="image"
 			control={control}
-			render={({ field, fieldState }) => {
-				const previewUrl = field.value
-					? URL.createObjectURL(field.value)
-					: project?.image_url;
-
-				return (
-					<div className="min-w-0 h-full flex flex-col">
-						<label className="block text-sm mb-2">
-							Изображение
-						</label>
-
-						<div className="flex items-center gap-4 p-3 rounded-xl border border-dark-600 bg-dark-800/50 !h-[104px]">
-							<div className="w-20 h-20 shrink-0 rounded-lg overflow-hidden bg-dark-700 flex items-center justify-center">
-								{previewUrl ? (
-									<img
-										src={previewUrl}
-										alt={
-											field.value?.name ??
-											project?.title ??
-											"Изображение проекта"
-										}
-										className="w-full h-full object-cover"
-									/>
-								) : (
-									<span className="text-dark-400 text-xs text-center px-2">
-										Нет фото
-									</span>
-								)}
-							</div>
-
-							<div className="min-w-0 flex-1">
-								<label className="inline-flex cursor-pointer">
-									<span className="glass-button">
-										Выбрать изображение
-									</span>
-
-									<input
-										type="file"
-										accept="image/jpeg,image/png,image/webp,image/gif"
-										className="hidden"
-										onChange={(event) => {
-											field.onChange(
-												event.target.files?.[0] ?? null
-											);
-										}}
-									/>
-								</label>
-
-								<p className="mt-2 text-xs text-dark-400 truncate">
-									{field.value
-										? field.value.name
-										: "JPG, PNG, WEBP или GIF · до 10 МБ"}
-								</p>
-							</div>
-						</div>
-
-						{fieldState.error && (
-							<p className="mt-1 text-sm text-red-400">
-								{fieldState.error.message}
-							</p>
-						)}
-					</div>
-				);
-			}}
+			render={({ field, fieldState }) => (
+				<ImageFieldContent
+					project={project}
+					field={field}
+					fieldState={fieldState}
+				/>
+			)}
 		/>
+	);
+}
+
+function ImageFieldContent({ project, field, fieldState }) {
+	const [previewUrl, setPreviewUrl] = useState(project?.image_url);
+
+	useEffect(() => {
+		if (!field.value) {
+			setPreviewUrl(project?.image_url);
+			return;
+		}
+
+		const url = URL.createObjectURL(field.value);
+
+		setPreviewUrl(url);
+
+		return () => {
+			URL.revokeObjectURL(url);
+		};
+	}, [field.value, project?.image_url]);
+
+	return (
+		<div className="min-w-0 h-full flex flex-col">
+			<label className="block text-sm mb-2">
+				Изображение
+			</label>
+
+			<div className="flex items-center gap-4 p-3 rounded-xl border border-dark-600 bg-dark-800/50 !h-[104px]">
+				<div className="w-20 h-20 shrink-0 rounded-lg overflow-hidden bg-dark-700 flex items-center justify-center">
+					{previewUrl ? (
+						<img
+							src={previewUrl}
+							alt={
+								field.value?.name ??
+								project?.title ??
+								"Изображение проекта"
+							}
+							className="w-full h-full object-cover"
+						/>
+					) : (
+						<span className="text-dark-400 text-xs text-center px-2">
+							Нет фото
+						</span>
+					)}
+				</div>
+
+				<div className="min-w-0 flex-1">
+					<label className="inline-flex cursor-pointer">
+						<span className="glass-button">
+							Выбрать изображение
+						</span>
+
+						<input
+							type="file"
+							accept="image/jpeg,image/png,image/webp,image/gif"
+							className="hidden"
+							onChange={(event) => {
+								field.onChange(
+									event.target.files?.[0] ?? null
+								);
+							}}
+						/>
+					</label>
+
+					<p className="mt-2 text-xs text-dark-400 truncate">
+						{field.value
+							? field.value.name
+							: "JPG, PNG, WEBP или GIF · до 10 МБ"}
+					</p>
+				</div>
+			</div>
+
+			{fieldState.error && (
+				<p className="mt-1 text-sm text-red-400">
+					{fieldState.error.message}
+				</p>
+			)}
+		</div>
 	);
 }
 

@@ -34,9 +34,10 @@ export function MessagesList({
 
 	return (
 		<div className="flex flex-col gap-4">
-			{messages.map(messages => (
-				<MessagesItem key={messages._id}
-					message={messages}
+			{messages.map(message => (
+				<MessagesItem
+					key={message._id}
+					message={message}
 					selectedMessage={selectedMessage}
 					onOpenMessage={onOpenMessage}
 					onDeleteMessage={onDeleteMessage}
