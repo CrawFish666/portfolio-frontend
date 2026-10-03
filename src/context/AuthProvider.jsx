@@ -4,6 +4,7 @@ import { authApi } from "../api/auth.api";
 import { jwtDecode } from "jwt-decode";
 import { AuthContext } from "./AuthContext";
 import { authEvents } from "../auth/auth.events";
+import { refreshAccessToken } from "../auth/refresh.manager";
 
 
 export function AuthProvider({ children }) {
@@ -66,15 +67,17 @@ export function AuthProvider({ children }) {
 	}, [setUserFromToken]
 	)
 
-	const signOut = useCallback(async () => {
-		tokenManager.clearToken();
-		setUser(null);
-		try {
-			await authApi.signOut();
-		} catch (error) {
-			console.error("Logout error", error);
-		}
-	},
+	const signOut = useCallback(
+		async () => {
+			authEvents.emit("LOGOUT");
+			setUser(null);
+
+			try {
+				await authApi.signOut();
+			} catch (error) {
+				console.error("Logout error", error);
+			}
+		},
 		[]
 	);
 
@@ -82,9 +85,9 @@ export function AuthProvider({ children }) {
 	useEffect(() => {
 		const initAuth = async () => {
 			try {
-				const data = await authApi.refresh();
-				tokenManager.setToken(data.accessToken);
-				setUserFromToken(data.accessToken);
+				const accessToken = await refreshAccessToken();
+
+				setUserFromToken(accessToken);
 			} catch (error) {
 				// Нет активной сессии
 				tokenManager.clearToken();
@@ -92,9 +95,10 @@ export function AuthProvider({ children }) {
 			} finally {
 				setLoading(false);
 			}
-		}
+		};
+
 		initAuth();
-	}, [setUserFromToken])
+	}, [setUserFromToken]);
 
 	useEffect(() => {
 		const unsubscribe = authEvents.subscribe(
