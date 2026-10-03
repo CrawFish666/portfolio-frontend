@@ -4,7 +4,7 @@ import { projectsApi } from "../../api/projects.api";
 export function useProjects(params) {
 	return useQuery({
 		queryKey: ["projects", "list", params],
-		queryFn: () => projectsApi.getAll(params),
+		queryFn: ({ signal }) => projectsApi.getAll(params, { signal }),
 	});
 }
 

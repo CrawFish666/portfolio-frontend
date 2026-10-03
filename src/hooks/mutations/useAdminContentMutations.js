@@ -20,6 +20,10 @@ export function useAdminContentMutations(tab) {
 		queryClient.invalidateQueries({
 			queryKey: ["admin-content", tab],
 		});
+
+		queryClient.invalidateQueries({
+			queryKey: [tab, "public-list"],
+		});
 	};
 
 	const createItem = useMutation({
