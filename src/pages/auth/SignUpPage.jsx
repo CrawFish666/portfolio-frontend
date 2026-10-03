@@ -7,7 +7,7 @@ import { registerSchema } from "../../utils/authValidationScheme";
 import { ROUTES } from '../../routes/pathsConstants';
 
 export function SignUpPage() {
-	const { setAuthData, signUp } = useAuth();
+	const { signUp } = useAuth();
 	const navigate = useNavigate();
 
 	const {
@@ -24,9 +24,7 @@ export function SignUpPage() {
 	const onSubmit = async (data) => {
 		try {
 			const { repeatPassword, ...body } = data;
-			const json = await signUp(body);
-			// Автоматический вход после регистрации
-			setAuthData(json.accessToken);
+			await signUp(body);
 			reset();
 			navigate(ROUTES.HOME, {
 				replace: true
