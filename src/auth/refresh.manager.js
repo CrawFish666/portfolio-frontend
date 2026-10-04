@@ -27,8 +27,9 @@ const refreshDirectly = async () => {
 		return newToken;
 	} catch (error) {
 
-		authEvents.emit("LOGOUT");
-
+		if (error.response?.status === 401) {
+			authEvents.emit("LOGOUT");
+		}
 		throw error;
 	}
 };

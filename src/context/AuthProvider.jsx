@@ -71,6 +71,21 @@ export function AuthProvider({ children }) {
 		}
 	}, []);
 
+	useEffect(() => {
+		const unsubscribe = authEvents.subscribe(
+			(event, token) => {
+				if (event === "TOKEN_UPDATED") {
+					setUserFromToken(token);
+				}
+				if (event === "LOGOUT") {
+					setUser(null);
+				}
+			}
+		);
+		return unsubscribe;
+
+	}, [setUserFromToken]);
+
 	// Восстановление сессии при F5/Заходе на сайте
 	useEffect(() => {
 		const initAuth = async () => {
@@ -90,20 +105,6 @@ export function AuthProvider({ children }) {
 		initAuth();
 	}, [setUserFromToken]);
 
-	useEffect(() => {
-		const unsubscribe = authEvents.subscribe(
-			(event, token) => {
-				if (event === "TOKEN_UPDATED") {
-					setUserFromToken(token);
-				}
-				if (event === "LOGOUT") {
-					setUser(null);
-				}
-			}
-		);
-		return unsubscribe;
-
-	}, [setUserFromToken]);
 
 	const forgotPassword = useCallback(async (email) => {
 		return authApi.forgotPassword(email);

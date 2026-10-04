@@ -9,6 +9,11 @@ export class ApiError extends Error {
 }
 
 export function normalizeError(error) {
+
+	if (error instanceof ApiError) {
+		return error;
+	}
+
 	if (!error.response) {
 		return new ApiError({
 			message: "Не удалось связаться с сервером. Проверьте подключение.",
