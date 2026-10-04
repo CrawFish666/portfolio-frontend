@@ -84,8 +84,13 @@ describe("Обновление access token", () => {
 	});
 
 	describe("Ошибка обновления токена", () => {
-		it("вызывает событие LOGOUT при ошибке refresh", async () => {
-			const error = new Error("Refresh failed");
+		const httpError = (status) =>
+			Object.assign(new Error(`HTTP ${status}`), {
+				response: { status },
+			});
+
+		it("вызывает LOGOUT, если сервер ответил 401 (сессия закончилась)", async () => {
+			const error = httpError(401);
 
 			postMock.mockRejectedValue(error);
 
@@ -94,12 +99,38 @@ describe("Обновление access token", () => {
 			expect(emitMock).toHaveBeenCalledWith("LOGOUT");
 		});
 
-		it("пробрасывает исходную ошибку refresh", async () => {
-			const error = new Error("Refresh failed");
+		it.each([
+			["сетевая ошибка (нет response)", new Error("Network Error")],
+			["500", httpError(500)],
+			["503", httpError(503)],
+			["403 (например, CSRF/origin)", httpError(403)],
+		])(
+			"не вызывает LOGOUT при ошибке: %s, но пробрасывает её",
+			async (_, error) => {
+				postMock.mockRejectedValue(error);
 
-			postMock.mockRejectedValue(error);
+				await expect(refreshAccessToken()).rejects.toBe(error);
 
-			await expect(refreshAccessToken()).rejects.toBe(error);
+				expect(emitMock).not.toHaveBeenCalledWith("LOGOUT");
+			}
+		);
+
+		it("после ошибки следующий refresh выполняется заново", async () => {
+			postMock.mockRejectedValueOnce(httpError(500));
+
+			await expect(refreshAccessToken()).rejects.toBeDefined();
+
+			postMock.mockResolvedValueOnce({
+				data: {
+					data: {
+						accessToken: "recovered-token",
+					},
+				},
+			});
+
+			await expect(refreshAccessToken()).resolves.toBe("recovered-token");
+
+			expect(postMock).toHaveBeenCalledTimes(2);
 		});
 	});
 
@@ -158,6 +189,33 @@ describe("Обновление access token", () => {
 	});
 
 	describe("Web Locks API", () => {
+		it("делает refresh, если токен не изменился", async () => {
+			tokenManager.setToken("same-token");
+
+			const requestMock = vi.fn(
+				async (name, options, callback) => callback()
+			);
+
+			vi.stubGlobal("navigator", {
+				locks: {
+					request: requestMock,
+				},
+			});
+
+			postMock.mockResolvedValue({
+				data: {
+					data: {
+						accessToken: "new-token",
+					},
+				},
+			});
+
+			const token = await refreshAccessToken();
+
+			expect(token).toBe("new-token");
+			expect(postMock).toHaveBeenCalledTimes(1);
+		});
+
 		it("делает refresh напрямую, если Web Locks API недоступен", async () => {
 			postMock.mockResolvedValue({
 				data: {

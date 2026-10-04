@@ -127,6 +127,30 @@ describe("API client", () => {
 	});
 
 	describe("Response interceptor", () => {
+		it.each([
+			"/auth/login",
+			"/auth/register",
+			"/auth/refresh",
+			"/auth/logout",
+		])("не запускает refresh для 401 на %s", async (url) => {
+			const error = {
+				response: {
+					status: 401,
+				},
+				config: {
+					url,
+					headers: {},
+				},
+			};
+
+			await expect(
+				responseErrorHandler(error)
+			).rejects.toBe(error);
+
+			expect(refreshAccessTokenMock)
+				.not.toHaveBeenCalled();
+		});
+
 		it("возвращает успешный response без изменений", () => {
 			const response = {
 				status: 200,

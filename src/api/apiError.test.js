@@ -44,6 +44,19 @@ describe("ApiError", () => {
 });
 
 describe("normalizeError", () => {
+	describe("Повторная нормализация", () => {
+		it("возвращает ApiError как есть, не превращая его в NETWORK_ERROR", () => {
+			const original = new ApiError({
+				message: "Ошибка валидации",
+				code: "VALIDATION_ERROR",
+				status: 400,
+				fieldErrors: { slug: "Slug уже занят" },
+			});
+
+			expect(normalizeError(original)).toBe(original);
+		});
+	});
+
 	describe("Сетевая ошибка", () => {
 		it("возвращает NETWORK_ERROR, если сервер не ответил", () => {
 			const error = normalizeError(
