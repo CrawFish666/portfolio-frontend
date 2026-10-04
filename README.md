@@ -9,27 +9,34 @@ Frontend React developer portfolio с админ-панелью и интегр�
 ## Стек
 
 - **React 19** + **Vite**
-- **Tailwind CSS v4** — dark/light темы через CSS variables
-- **TanStack Query** — управление серверным состоянием
-- **React Hook Form + Zod** — валидация форм
-- **React Router DOM** — роутинг с защитой
-- **Axios** — HTTP клиент с interceptors и refresh-очередью
-- **Sonner** — тосты
+- **Tailwind CSS v4** — стилизация с CSS variables для dark/light тем
+- **TanStack Query** — серверное состояние, кэширование, мутации и инвалидация
+- **React Hook Form + Zod** — формы и валидация
+- **React Router DOM** — маршрутизация и защита роутов
+- **Axios** — HTTP-клиент, interceptors и автоматическое обновление access token
+- **Sonner** — toast-уведомления
+- **Lucide React / React Icons** — иконки
+- **JWT Decode** — работа с JWT
+- **Vitest + Testing Library** — unit и component-тестирование
 
 ## Структура проекта
 
 ```
 src/
-├── api/                    # API клиенты (axios instances)
-│   ├── client.js           # Базовый axios инстанс
-│   ├── auth.api.js         # Авторизация
-│   ├── projects.api.js     # Проекты
-│   ├── settings.api.js     # Настройки
-│   ├── technologies.api.js # Категории и технологии
+├── api/
+│   ├── client.js             # Axios instance + interceptors + refresh
+│   ├── apiError.js           # Нормализация API/сетевых ошибок
+│   ├── queryClient.js        # TanStack Query configuration
+│   ├── auth.api.js           # Авторизация
+│   ├── projects.api.js       # Проекты
+│   ├── settings.api.js       # Настройки
 │   └── ...
-├── auth/                   # Auth утилиты
-│   ├── token.manager.js    # Хранение access token
-│   └── auth.events.js
+├── auth/
+│   ├── auth.channel.js       # Канал синхронизации между вкладками
+│   ├── auth.events.js        # События авторизации
+│   ├── refresh.manager.js    # Управление refresh token
+│   └── token.manager.js      # Хранение access token
+│
 ├── components/
 │   ├── layout/             # Header, Footer, MobileMenu
 │   ├── ui/                 # Переиспользуемые UI компоненты
@@ -69,8 +76,40 @@ src/
 │   ├── ProtectedRoutes.jsx
 │   ├── GuestOnlyRoutes.jsx
 │   └── AdminOnlyRoutes.jsx
-└── utils/                  # Утилиты и схемы валидации
+├── utils/                  # Утилиты и схемы валидации
+│
+└── tests/
+    ├── fakeServer.js         # Тестовый HTTP adapter/server
+    └── setupTests.js         # Test setup
 ```
+
+---
+
+## Тестирование
+
+Для тестирования используются **Vitest**, **Testing Library**, **User Event** и **jsdom**.
+
+Покрыты:
+
+- утилиты и Zod-схемы;
+- `token manager` и `auth events`;
+- API client и обработка ошибок;
+- обновление access token;
+- конкурентные запросы и refresh lock;
+- ContactForm;
+- интеграционные сценарии авторизации.
+
+Запуск тестов:
+
+```bash
+# Watch-режим
+npm run test
+
+# Однократный запуск
+npm run test:run
+```
+
+---
 
 ## Роуты
 
@@ -104,23 +143,57 @@ src/
 | `/dashboard/experience` | Управление опытом |
 | `/dashboard/availability-statuses` | Статусы доступности |
 
+---
+
+## Переменные окружения
+
+Создайте файл `.env`:
+
+```env
+VITE_API_BASE_URL=http://localhost:5000/api
+VITE_FILE_BASE_URL=http://localhost:5000
+VITE_DEV=true
+```
+
+Для production используются соответствующие URL backend API.
+
+---
+
 ## Как запустить
 
 ```bash
 # Установка зависимостей
 npm install
 
-# Запуск dev сервера
+# Запуск dev-сервера
 npm run dev
 
-# Сборка
-npm run build
+# Проверка ESLint
+npm run lint
 
+# Автоматическое исправление ESLint
+npm run lint:fix
+
+# Запуск тестов в watch-режиме
+npm run test
+
+# Однократный запуск тестов
+npm run test:run
+
+# Production-сборка
+npm run build
 ```
 
-## Описание сервисов
+---
 
-- `src/auth/token.manager.js` — хранит access token в памяти
-- `src/api/client.js` — Axios с interceptors + refresh очередь
-- `src/context/AuthProvider.jsx` — состояние пользователя и логика auth
-- `src/providers/QueryProvider.jsx` — React Query client
+## Связанные репозитории
+
+- Backend: `CrawFish666/portfolio-backend`
+
+---
+
+## Статус проекта
+
+Проект находится в активной разработке.
+
+Текущие задачи и планы находятся в [ROADMAP.md](./ROADMAP.md).

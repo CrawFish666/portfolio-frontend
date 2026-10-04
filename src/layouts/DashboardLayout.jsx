@@ -24,7 +24,7 @@ export function DashboardLayout() {
 
 	const [mobileOpen, setMobileOpen] = useState(false);
 	const [collapsed, setCollapsed] = useState(false);
-	const navigate = useNavigate();
+	// const navigate = useNavigate();
 	const { user, signOut } = useAuth();
 
 	const handleLogout = async () => {

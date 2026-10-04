@@ -1,11 +1,18 @@
 import axios from "axios";
 import qs from "qs";
 import { tokenManager } from "../auth/token.manager";
-import { authEvents } from "../auth/auth.events";
 import { normalizeError } from "./apiError";
 import { refreshAccessToken } from "../auth/refresh.manager";
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
+
+const NO_REFRESH_URLS = [
+	"/auth/login",
+	"/auth/register",
+	"/auth/refresh",
+	"/auth/logout",
+];
+const shouldSkipRefresh = (url = "") => NO_REFRESH_URLS.some((path) => url.startsWith(path));
 
 const api = axios.create({
 	baseURL: API_BASE_URL,
@@ -17,7 +24,6 @@ const api = axios.create({
 			}),
 	},
 });
-
 
 api.interceptors.request.use((config) => {
 	const token = tokenManager.getToken();
@@ -37,7 +43,8 @@ api.interceptors.response.use(
 		if (
 			error.response?.status !== 401 ||
 			!originalRequest ||
-			originalRequest._retry
+			originalRequest._retry ||
+			shouldSkipRefresh(originalRequest.url)
 		) {
 			return Promise.reject(error);
 		}

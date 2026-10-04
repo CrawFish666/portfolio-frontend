@@ -5,7 +5,7 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod"
 import { resetPasswordSchema } from "../../utils/authValidationScheme";
-import { ArrowLeft, CheckCircle, Loader, Loader2, XCircle, Lock } from "lucide-react";
+import { ArrowLeft, CheckCircle, Loader2, XCircle, Lock } from "lucide-react";
 import { ROUTES } from "../../routes/pathsConstants";
 
 
