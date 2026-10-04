@@ -1,7 +1,5 @@
 import { BsTypescript } from "react-icons/bs"
-import { DiPostgresql } from "react-icons/di"
-import { FaNodeJs, FaReact } from "react-icons/fa"
-import { TbWorld } from "react-icons/tb"
+import { FaReact } from "react-icons/fa"
 import { RiTailwindCssFill } from "react-icons/ri";
 import { SiTanstack } from "react-icons/si";
 

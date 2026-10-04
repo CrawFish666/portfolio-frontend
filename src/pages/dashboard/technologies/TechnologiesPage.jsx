@@ -3,7 +3,7 @@
 // Создать service для api
 
 import { useForm, } from "react-hook-form";
-import { Pencil, Trash, Trash2 } from "lucide-react";
+import { Pencil, Trash2 } from "lucide-react";
 import { CategoryModal } from "./components/CategoryModal";
 import { TechnologyModal } from "./components/TechnologyModal";
 import { useCategories } from "../../../hooks/queries/useCategories";

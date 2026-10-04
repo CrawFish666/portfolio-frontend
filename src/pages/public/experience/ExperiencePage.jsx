@@ -1,5 +1,3 @@
-import { useEffect, useState } from "react"
-
 import { ExperienceLanguages } from "./components/ExperienceLanguages"
 import { ExperienceEducation } from "./components/ExperienceEducation"
 import { ExperienceTimeline } from "./components/ExperienceTimeline"
@@ -11,8 +9,8 @@ export function ExperiencePage() {
 		experiences,
 		educations,
 		languages,
-		isLoading,
-		isError,
+		// isLoading,
+		// isError,
 	} = useExperience();
 
 

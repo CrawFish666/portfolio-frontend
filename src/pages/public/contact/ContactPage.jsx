@@ -10,7 +10,7 @@ export function ContactPage() {
 	const {
 		data: settings = null,
 		isLoading,
-		isError,
+		// isError,
 	} = useSettings();
 
 	const emailContact = settings?.contacts?.find(
